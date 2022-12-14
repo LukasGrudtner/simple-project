@@ -26,5 +26,13 @@ pipeline {
             sh 'jf rt upload --url http://192.168.1.112:8889/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/${IMAGE}-${VERSION}.jar simple-project/'
         }
     }
+
+    stage('Sonar analysis') {
+      steps {
+        withSonarQubeEnv(installationName: 'sonarqube') {
+          sh 'mvn clean sonar:sonar'
+        }
+      }
+    }
   }
 }
